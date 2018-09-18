@@ -4,7 +4,7 @@
 using namespace std;
 
 enum enemyTypes {Zombie = 0, Ninja, Dinosaur, Samurai, Warewolf};
-typedef enum enemyTypes enemyType;//enemy types for displaying
+typedef enum enemyTypes enemyType;//changing type name for make it look less messy
 
 class Person//player's class
 {

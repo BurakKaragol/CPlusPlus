@@ -1,0 +1,259 @@
+#include <iostream>
+#include <time.h>
+#include <cstring>
+using namespace std;
+
+enum enemyTypes {Zombie = 0, Ninja, Dinosaur, Samurai, Warewolf};
+typedef enum enemyTypes enemyType;//enemy types for displaying
+
+class Person//player's class
+{
+public:
+    char name[20] = "Unnamed";
+    bool isAlive = true;
+    int health = 100;
+    int attackPower = 10;
+    int enemyKilled = 0;
+    int fights = 0;
+    enemyType isKilledBy;
+    Person(char newName[20])//health and attack power is randomly generated
+    {
+        attackPower = 5 + rand() % 20;
+        health = 50 + rand() % 50;
+        strcpy(name, newName);
+        cout << "Hi " << name << " !" << endl;
+        cout << "Your health is " << health << " and your power is " << attackPower << endl;
+    }
+    void display()
+    {
+        if (this->isAlive)
+        {
+            cout << "Your health is " << health << " and your power is " << attackPower << endl;
+            if (enemyKilled == 1)
+                cout << "You have killed 1 enemie !!" << endl;
+            else
+                cout << "You have killed " << enemyKilled << " enemies !!" << endl;
+        }
+        else
+        {
+            cout << "!!GAME OVER!!" << endl;
+            switch (isKilledBy)
+            {
+                case Zombie:
+                    cout << "Killed by : Zombie" << endl;
+                    break;
+                case Ninja:
+                    cout << "Killed by : Ninja" << endl;
+                    break;
+                case Samurai:
+                    cout << "Killed by : Samurai" << endl;
+                    break;
+                case Warewolf:
+                    cout << "Killed by : Warewolf" << endl;
+                    break;
+                case Dinosaur:
+                    cout << "Killed by : Dinosaur" << endl;
+                    break;
+            }
+            cout << "Enemies killed : " << enemyKilled << endl;
+            cout << "You have faced " << fights << " enemies !!" << endl;
+            cout << "Escaped from : " << fights - enemyKilled - 1 << endl;
+            cout << "*\\(^-^)/* THANKS FOR PLAYING *\\(^-^)/*" << endl;
+        }
+    }
+};
+
+class Enemy//enemy's class
+{
+public:
+    enemyType type = Zombie;//enemy type just for making game more enjoyable
+    char typeName[20] = "\0";
+    int health = 75;
+    int attackPower = 10;
+    bool isAlive = true;
+    Enemy(enemyType enemyType1)//health and attack power is generated randomly also...
+    {
+        type = enemyType1;
+        health = 25 + rand() % 50;
+        attackPower = rand() % 10;
+        switch (enemyType1)//for displaying enemy type
+        {
+            case Zombie:
+                strcat(typeName, "zombie");
+                break;
+            case Ninja:
+                strcat(typeName, "ninja");
+                break;
+            case Samurai:
+                strcat(typeName, "samurai");
+                break;
+            case Warewolf:
+                strcat(typeName, "warewolf");
+                break;
+            case Dinosaur:
+                strcat(typeName, "dinasour");
+                break;
+        }
+        cout << "Ohh NO! it's a " << typeName << " !!" << endl;
+        cout <<"It's health is " << health << " and it's power is " << attackPower << endl;
+    }
+    void display()
+    {
+        cout <<"The " << typeName << "'s health is " << health << " and it's power is " << attackPower << endl;
+    }
+};
+
+int attack (Person *p, Enemy *e)//the attack function wich returns the winner
+{
+    while (p->isAlive && e->isAlive)
+    {
+        p->health -= e->attackPower;
+        e->health -= p->attackPower;
+        if (p->health <= 0)
+            p->isAlive = false;
+        else if (e->health <= 0)
+            e->isAlive = false;
+    }
+    if (p->isAlive)//if player is alive
+    {
+        p->enemyKilled++;
+        return 1;
+    }
+    else if (e->isAlive)//if enemy is alive
+    {
+        p->isKilledBy = e->type;
+        return -1;
+    }
+    else//if they both die
+        return 0;
+}
+
+enemyType seeEnemy()
+{
+    int randomize = rand() % sizeof(enemyType);
+    switch (randomize)
+    {
+        case Zombie:
+            return Zombie;
+        case Ninja:
+            return Ninja;
+        case Samurai:
+            return Samurai;
+        case Warewolf:
+            return Warewolf;
+        case Dinosaur:
+            return Dinosaur;
+    }
+}
+
+void winner (Person *player1, Enemy *enemy1, int fight)
+{
+    if (fight == 0)
+        cout << "You have killed each other !!" << endl;
+    else if (fight == -1)
+    {
+        cout << "The " << enemy1->typeName << " killed you !!" << endl;
+        player1->isAlive = false;
+        enemy1->display();
+        switch (enemy1->type)
+        {
+            case Zombie:
+                cout << "Zombie: Your brain tastes like trash !!" << endl;
+                player1->display();
+                break;
+            case Ninja:
+                cout << "Ninja: No one has a change against my shirukens !!" << endl;
+                player1->display();
+                break;
+            case Samurai:
+                cout << "Samurai: My blade is so sharp !!" << endl;
+                player1->display();
+                break;
+            case Warewolf:
+                cout << "Warewolf: I don't even need to use my teeths to kill you !!" << endl;
+                player1->display();
+                break;
+            case Dinosaur:
+                cout << "Dinosaur: Roarrrrrr !!" << endl;
+                player1->display();
+                break;
+        }
+    }
+    else
+    {
+        cout << "You killed the " << enemy1->typeName << " !!" << endl;
+        player1->display();
+    }
+}
+
+bool decision(Person *p)
+{
+    char answer[5];
+    cout << "Do you wanna fight ? [yes/no]";
+    cin >> answer;
+    p->fights++;
+    if (strcmp(answer, "yes"))
+    {
+        return true;
+    }
+    else if (strcmp(answer, "no"))
+    {
+        return false;
+    }
+    else
+    {
+        cout << "You have died because of mispronounciation !!";
+        exit(1);
+    }
+}
+
+int main()
+{
+    srand(time(NULL));
+    char plyrName[20];
+    cout << "Please type your name..:";
+    cin >> plyrName;
+    Person player1(plyrName);
+    enemyType enemyType1;
+    while (player1.isAlive)
+    {
+        enemyType1 = seeEnemy();
+        Enemy enemy1(enemyType1);
+        bool choice = decision(&player1);
+        if (choice)
+        {
+            switch (enemy1.type)
+            {
+                case Zombie:
+                    cout << "You escaped from the zombie !!" << endl;
+                    player1.display();
+                    break;
+                case Ninja:
+                    cout << "The ninja chased and catched you !!\n-10 health!" << endl;
+                    player1.health -= 10;
+                    player1.display();
+                    break;
+                case Samurai:
+                    cout << "The samurai tried to chase you but failed !!" << endl;
+                    player1.display();
+                    break;
+                case Warewolf:
+                    cout << "The warewolf catched you in a second and killed you !!" << endl;
+                    player1.isAlive = false;
+                    player1.display();
+                    break;
+                case Dinosaur:
+                    cout << "The dinasour stepped on you !!" << endl;
+                    player1.isAlive = false;
+                    player1.display();
+                    break;
+            }
+        }
+        else
+        {
+            int fight = attack(&player1, &enemy1);
+            winner(&player1, &enemy1, fight);
+        }
+    }
+    return 0;
+}

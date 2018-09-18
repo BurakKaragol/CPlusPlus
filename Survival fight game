@@ -26,7 +26,7 @@ public:
     }
     void display()
     {
-        if (this->isAlive)
+        if (this->isAlive)//displaying the specs of the person if its not died yet
         {
             cout << "Your health is " << health << " and your power is " << attackPower << endl;
             if (enemyKilled == 1)
@@ -34,7 +34,7 @@ public:
             else
                 cout << "You have killed " << enemyKilled << " enemies !!" << endl;
         }
-        else
+        else//codes for end of the game
         {
             cout << "!!GAME OVER!!" << endl;
             switch (isKilledBy)
@@ -97,7 +97,7 @@ public:
         cout << "Ohh NO! it's a " << typeName << " !!" << endl;
         cout <<"It's health is " << health << " and it's power is " << attackPower << endl;
     }
-    void display()
+    void display()//displaying the enemy specs
     {
         cout <<"The " << typeName << "'s health is " << health << " and it's power is " << attackPower << endl;
     }
@@ -128,7 +128,7 @@ int attack (Person *p, Enemy *e)//the attack function wich returns the winner
         return 0;
 }
 
-enemyType seeEnemy()
+enemyType seeEnemy()//for make it more realistic enemy type is selected randomly
 {
     int randomize = rand() % sizeof(enemyType);
     switch (randomize)
@@ -146,7 +146,7 @@ enemyType seeEnemy()
     }
 }
 
-void winner (Person *player1, Enemy *enemy1, int fight)
+void winner (Person *player1, Enemy *enemy1, int fight)//make them kill eachother
 {
     if (fight == 0)
         cout << "You have killed each other !!" << endl;
@@ -186,7 +186,7 @@ void winner (Person *player1, Enemy *enemy1, int fight)
     }
 }
 
-bool decision(Person *p)
+bool decision(Person *p)//making the decision to fight or run away
 {
     char answer[5];
     cout << "Do you wanna fight ? [yes/no]";
@@ -215,7 +215,7 @@ int main()
     cin >> plyrName;
     Person player1(plyrName);
     enemyType enemyType1;
-    while (player1.isAlive)
+    while (player1.isAlive)//as long as player is alive the fight continues (yeap this game do not have a winner)
     {
         enemyType1 = seeEnemy();
         Enemy enemy1(enemyType1);

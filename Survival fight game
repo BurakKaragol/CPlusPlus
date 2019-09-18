@@ -162,7 +162,7 @@ void winner (Person *player1, Enemy *enemy1, int fight)//make them kill eachothe
                 player1->display();
                 break;
             case Ninja:
-                cout << "Ninja: No one has a change against my shirukens !!" << endl;
+                cout << "Ninja: No one has a chance against my shirukens !!" << endl;
                 player1->display();
                 break;
             case Samurai:

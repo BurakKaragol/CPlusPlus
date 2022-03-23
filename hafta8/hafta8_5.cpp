@@ -19,6 +19,8 @@ public:
 
 SinifA SinifB::a;
 
+// reaching data on first class without reaching the class itself
+// instead we are using another class to read the data
 int main()
 {
     SinifA a = SinifB::getA();
